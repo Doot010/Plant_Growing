@@ -11,6 +11,10 @@ class Pixels:
         global color, surface, size
         pygame.draw.rect(surface, color, [xPos, yPos, size, size], 0)
 
+    def getSize():
+        global size
+        return size
+
 
     
 
