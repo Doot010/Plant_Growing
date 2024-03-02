@@ -8,8 +8,8 @@ surface = pygame.display.set_mode((800, 600))
 
 Pixels.define(surface, 255, 255, 255, 8)
 
-#Inputs: maxHeight, strtPos, strtHeight, curveChance
-Plant.growingPlant(200, 400, 600, 7)
+#Inputs: maxHeight, strtPos, strtHeight, curveChance(out of 100), branchChance(out of 100)
+Plant.growingPlant(200, 400, 600, 0, 70)
 
 #game loop
 run = True

@@ -1,12 +1,10 @@
 from Pixels import Pixels
-import random
-import pygame
+import random, math, pygame
 
 class Plant:
 
     #vars
-    height = 0
-    pos = 0
+
 
     #kill window function
     def kill():
@@ -14,40 +12,41 @@ class Plant:
         if key [pygame.K_SPACE]:
             pygame.quit()
 
-    def wideGrowth(use):
+    def branchingStem(LoR):
         
 
         global height, pos
+        branchHeight = height
+        branchPos = pos
         pixSize = Pixels.getSize()
-        LoR = use
+        #LoR = random.randint(0, 1)
 
-        wide = random.randint(3, 9)
+        wide = random.randint(6, 20)
         counter = 0
 
         if (LoR%2) == 1:
             print("left")
-            while counter <= wide:
-
-                counter += 1 #counting how many times it moves to the side
-                posChange = random.randint(2, pixSize) #how far to the side it should move
-
-                Pixels.pixel(pos, height)
-                height -= 2
-                pos -= posChange
-                pygame.display.update()
-                pygame.time.wait(100)
+            
         else:
             print("right")
-            while counter <= wide:
+            pixSize = pixSize*-1
 
-                counter += 1 #counting how many times it moves to the side
-                posChange = random.randint(2, pixSize) #how far to the side it should move
+        #stuff for changing height
+        UorD = random.randrange(-1, 2, 2)
+        amp = random.randint(1, 2)
+        
+        while counter <= wide:
 
-                Pixels.pixel(pos, height)
-                height -= 2
-                pos += posChange
-                pygame.display.update()
-                pygame.time.wait(100)
+            heightChange = UorD * amp * (math.sqrt(counter)) # final result for heightChange
+
+
+            Pixels.pixel(branchPos, branchHeight)
+            branchHeight -= heightChange
+            branchPos -= pixSize
+            pygame.display.update()
+            pygame.time.wait(100)
+
+            counter += 1 #counting how many times it moves to the side
         
     def wideGrowthCurve(use):
         
@@ -85,7 +84,7 @@ class Plant:
 
     def verticalGrowth():
         global height, pos
-        amount = random.randint(5, 10)
+        amount = random.randint(3, 7)
         x = 0
         while x <= amount:
             x += 1
@@ -98,52 +97,63 @@ class Plant:
     def curve():
         global height, pos
 
+        pixSize = Pixels.getSize()
         LoR = random.randint(0,1)
 
         Plant.wideGrowthCurve(LoR)
 
         #making curve smooth
-        amount = random.randint(1, 2)
+        amount = random.randrange(int(((1/5)*pixSize)), int((((1/4)*pixSize)+1)))
         x = 0
         while x <= amount:
-            x += 1
             Pixels.pixel(pos, height)
+
+            if x == amount:
+                amount = amount*(-1)
+            
             if (LoR%2) == 1:
-                height -= Pixels.getSize()
-                pos -= random.randint(1, 2)
+                height -= pixSize
+                pos -= amount
                 pygame.display.update()
                 pygame.time.wait(100)
             else:
-                height -= Pixels.getSize()
-                pos += random.randint(0, 2)
+                height -= pixSize
+                pos += amount
                 pygame.display.update()
                 pygame.time.wait(100)
+            x += 1
 
         LoR += 1
         Plant.wideGrowthCurve(LoR)
-        
 
-    def growingPlant(maxHeight, startPos, strtHeight, curveChance):
+
+    def growingPlant(maxHeight, startPos, strtHeight, curveChance, branchChance):
 
         global height, pos
         
         #vars
         repeat = True
-        use = 0
         pos = startPos
         height = strtHeight
+        LoR = random.randint(0, 1)
 
         while height >= maxHeight:
             Plant.kill()
-            action = random.randint(0, 10)
+            action = random.randint(0, 100)
             if action < curveChance:
-                print("z")
+                print("curve")
                 Plant.curve()
-                #use += 1
-                #repeat = False
+                repeat = True
+
+            elif action < (curveChance + branchChance) and repeat:
+                print("branch")
+                Plant.branchingStem(LoR)
+                repeat = False
+                LoR += 1
+
             else:
-                print("x")
+                print('vert')
                 Plant.verticalGrowth()
-                #repeat = True
+                repeat = True
 
     
