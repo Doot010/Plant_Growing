@@ -49,6 +49,40 @@ class Plant:
                 pygame.display.update()
                 pygame.time.wait(100)
         
+    def wideGrowthCurve(use):
+        
+
+        global height, pos
+        LoR = use
+        pixSize = Pixels.getSize()
+        wide = random.randint(2, 3)
+        counter = 0
+
+        if (LoR%2) == 1:
+            print("left")
+            while counter <= wide:
+
+                counter += 1 #counting how many times it moves to the side
+                posChange = random.randint(2, pixSize) #how far to the side it should move
+
+                Pixels.pixel(pos, height)
+                height -= (pixSize * (4/5))
+                pos -= posChange
+                pygame.display.update()
+                pygame.time.wait(100)
+        else:
+            print("right")
+            while counter <= wide:
+
+                counter += 1 #counting how many times it moves to the side
+                posChange = random.randint(2, pixSize) #how far to the side it should move
+
+                Pixels.pixel(pos, height)
+                height -= (pixSize * (4/5))
+                pos += posChange
+                pygame.display.update()
+                pygame.time.wait(100)
+
     def verticalGrowth():
         global height, pos
         amount = random.randint(5, 10)
@@ -57,11 +91,39 @@ class Plant:
             x += 1
             Pixels.pixel(pos, height)
             height -= Pixels.getSize()
-            pos += random.randint(-2, 2)
+            pos += random.randint(-3, 3)
             pygame.display.update()
             pygame.time.wait(100)
 
-    def growingPlant(maxHeight, startPos, strtHeight):
+    def curve():
+        global height, pos
+
+        LoR = random.randint(0,1)
+
+        Plant.wideGrowthCurve(LoR)
+
+        #making curve smooth
+        amount = random.randint(1, 2)
+        x = 0
+        while x <= amount:
+            x += 1
+            Pixels.pixel(pos, height)
+            if (LoR%2) == 1:
+                height -= Pixels.getSize()
+                pos -= random.randint(1, 2)
+                pygame.display.update()
+                pygame.time.wait(100)
+            else:
+                height -= Pixels.getSize()
+                pos += random.randint(0, 2)
+                pygame.display.update()
+                pygame.time.wait(100)
+
+        LoR += 1
+        Plant.wideGrowthCurve(LoR)
+        
+
+    def growingPlant(maxHeight, startPos, strtHeight, curveChance):
 
         global height, pos
         
@@ -74,14 +136,14 @@ class Plant:
         while height >= maxHeight:
             Plant.kill()
             action = random.randint(0, 10)
-            if (action < 6) and repeat:
+            if action < curveChance:
                 print("z")
-                Plant.wideGrowth(use)
-                use += 1
-                repeat = False
+                Plant.curve()
+                #use += 1
+                #repeat = False
             else:
                 print("x")
                 Plant.verticalGrowth()
-                repeat = True
+                #repeat = True
 
     

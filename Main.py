@@ -6,10 +6,10 @@ os.system("cls")
 pygame.init()
 surface = pygame.display.set_mode((800, 600))
 
-Pixels.define(surface, 255, 255, 255, 5)
+Pixels.define(surface, 255, 255, 255, 8)
 
-#first input must be greater than last
-Plant.growingPlant(200, 400, 600)
+#Inputs: maxHeight, strtPos, strtHeight, curveChance
+Plant.growingPlant(200, 400, 600, 7)
 
 #game loop
 run = True
